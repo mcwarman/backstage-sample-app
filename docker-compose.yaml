@@ -1,0 +1,27 @@
+services:
+  app:
+    image: ghcr.io/mcwarman/backstage-sample-app/app:main
+    ports:
+      - '3000:80'
+    environment:
+      APP_CONFIG_app_title: Scaffolded Backstage App
+      APP_CONFIG_app_baseUrl: http://localhost:3000
+      APP_CONFIG_organization_name: My Company
+
+  backend:
+    image: ghcr.io/mcwarman/backstage-sample-app/backend:main
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+    ports:
+      - '7007:7007'
+    volumes:
+      - './app-config.yaml:/app/app-config.yaml'
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      # NOT RECOMMENDED for a production environment. Trusts all incomming
+      # connections.
+      POSTGRES_HOST_AUTH_METHOD: trust

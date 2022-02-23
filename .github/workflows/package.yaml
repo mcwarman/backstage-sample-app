@@ -37,7 +37,7 @@ jobs:
           name: ${{ inputs.type }}
           path: ${{ steps.variables.outputs.artifact_path }}
       - name: Set up Docker metadata
-        id: docker_metadata
+        id: metadata
         uses: docker/metadata-action@v3
         with:
           images: ${{ steps.variables.outputs.image }}
@@ -55,5 +55,5 @@ jobs:
           file: ${{ steps.variables.outputs.dockerfile }}
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}

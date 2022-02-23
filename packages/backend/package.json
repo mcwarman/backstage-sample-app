@@ -6,7 +6,6 @@
   "private": true,
   "scripts": {
     "build": "backstage-cli backend:bundle",
-    "build-image": "docker build ../.. -f Dockerfile --tag backstage",
     "start": "backstage-cli backend:dev",
     "lint": "backstage-cli lint",
     "test": "backstage-cli test",
@@ -14,13 +13,11 @@
     "migrate:create": "knex migrate:make -x ts"
   },
   "dependencies": {
-    "app": "link:../app",
     "@backstage/backend-common": "^0.10.8",
     "@backstage/backend-tasks": "^0.1.7",
     "@backstage/catalog-model": "^0.10.0",
     "@backstage/catalog-client": "^0.7.0",
     "@backstage/config": "^0.1.14",
-    "@backstage/plugin-app-backend": "^0.3.25",
     "@backstage/plugin-auth-backend": "^0.10.1",
     "@backstage/plugin-catalog-backend": "^0.21.4",
     "@backstage/plugin-permission-common": "^0.5.0",

@@ -1,0 +1,9 @@
+# Ignore everything
+**
+
+# Allow files and directories
+!/yarn.lock
+!/package.json
+!/packages/backend/dist/skeleton.tar.gz
+!/packages/backend/dist/bundle.tar.gz
+!/app-config.yaml

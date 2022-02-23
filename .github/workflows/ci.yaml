@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache --check-cache
+      - run: yarn tsc
+      - run: yarn prettier:check
+      - run: yarn lint:all
+      - run: yarn test:all
+      - run: yarn build
+      - name: Upload app artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: packages/app/dist
+          retention-days: 5
+          if-no-files-found: error
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend
+          path: packages/backend/dist
+          retention-days: 5
+          if-no-files-found: error
+  package-app:
+    name: Package app
+    needs: build
+    uses: ./.github/workflows/package.yaml
+    with:
+      type: app
+  package-backend:
+    name: Package backend
+    needs: build
+    uses: ./.github/workflows/package.yaml
+    with:
+      type: backend

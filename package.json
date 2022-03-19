@@ -9,7 +9,7 @@
     "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
     "start": "yarn workspace app start",
     "start-backend": "yarn workspace backend start",
-    "build": "lerna run build",
+    "build": "backstage-cli repo build --all",
     "build-images": "concurrently \"yarn build-image-app\" \"yarn build-image-backend\"",
     "build-image-app": "docker build . -f dockerfile.app --tag ghcr.io/mcwarman/backstage-sample-app/app:main",
     "build-image-backend": "docker build . -f dockerfile.backend --tag ghcr.io/mcwarman/backstage-sample-app/backend:main",
@@ -19,8 +19,8 @@
     "diff": "lerna run diff --",
     "test": "backstage-cli test",
     "test:all": "lerna run test -- --coverage",
-    "lint": "lerna run lint --since origin/main --",
-    "lint:all": "lerna run lint --",
+    "lint": "backstage-cli repo lint --since origin/master",
+    "lint:all": "backstage-cli repo lint",
     "prettier:check": "prettier --check .",
     "create-plugin": "backstage-cli create-plugin --scope internal",
     "remove-plugin": "backstage-cli remove-plugin"
@@ -32,7 +32,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.14.0",
+    "@backstage/cli": "^0.16.0",
     "@spotify/prettier-config": "^12.0.0",
     "concurrently": "^6.0.0",
     "lerna": "^4.0.0",

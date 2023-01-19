@@ -4,31 +4,29 @@ import {
   IndexBuilder,
   LunrSearchEngine,
 } from '@backstage/plugin-search-backend-node';
-import { PgSearchEngine } from '@backstage/plugin-search-backend-module-pg';
 import { PluginEnvironment } from '../types';
 import { DefaultCatalogCollatorFactory } from '@backstage/plugin-catalog-backend';
 import { DefaultTechDocsCollatorFactory } from '@backstage/plugin-techdocs-backend';
 import { Router } from 'express';
-import { Duration } from 'luxon';
 
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
   // Initialize a connection to a search engine.
-  const searchEngine = (await PgSearchEngine.supported(env.database))
-    ? await PgSearchEngine.from({ database: env.database })
-    : new LunrSearchEngine({ logger: env.logger });
+  const searchEngine = new LunrSearchEngine({
+    logger: env.logger,
+  });
   const indexBuilder = new IndexBuilder({
     logger: env.logger,
     searchEngine,
   });
 
   const schedule = env.scheduler.createScheduledTaskRunner({
-    frequency: Duration.fromObject({ minutes: 10 }),
-    timeout: Duration.fromObject({ minutes: 15 }),
+    frequency: { minutes: 10 },
+    timeout: { minutes: 15 },
     // A 3 second delay gives the backend server a chance to initialize before
     // any collators are executed, which may attempt requests against the API.
-    initialDelay: Duration.fromObject({ seconds: 3 }),
+    initialDelay: { seconds: 3 },
   });
 
   // Collators are responsible for gathering documents known to plugins. This

@@ -15,8 +15,6 @@ services:
       POSTGRES_USER: postgres
     ports:
       - '7007:7007'
-    volumes:
-      - './app-config.yaml:/app/app-config.yaml'
 
   db:
     image: postgres

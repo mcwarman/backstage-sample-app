@@ -4,10 +4,10 @@ metadata:
   name: backstage-sample-app
   description: An example of a Backstage application.
   # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
+  annotations:
+    github.com/project-slug: mcwarman/backstage-sample-app
   #   backstage.io/techdocs-ref: dir:.
 spec:
   type: website
-  owner: john@example.com
+  owner: 7236500+mcwarman@users.noreply.github.com
   lifecycle: experimental

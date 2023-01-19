@@ -23,7 +23,7 @@ jobs:
       - run: yarn prettier:check
       - run: yarn lint:all
       - run: yarn test:all
-      - run: yarn build
+      - run: yarn build:all
       - name: Upload app artifact
         uses: actions/upload-artifact@v2
         with:

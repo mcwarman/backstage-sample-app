@@ -11,6 +11,8 @@ jobs:
   package:
     name: Package
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Set variables
         id: variables

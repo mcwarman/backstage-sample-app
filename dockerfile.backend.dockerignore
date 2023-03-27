@@ -6,4 +6,4 @@
 !/package.json
 !/packages/backend/dist/skeleton.tar.gz
 !/packages/backend/dist/bundle.tar.gz
-!/app-config*.yaml
+!/app-config.production.yaml

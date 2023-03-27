@@ -6,6 +6,7 @@ services:
     environment:
       APP_CONFIG_app_title: Scaffolded Backstage App
       APP_CONFIG_app_baseUrl: http://localhost:3000
+      APP_CONFIG_backend_baseUrl: http://localhost:7007
       APP_CONFIG_organization_name: My Company
 
   backend:
@@ -15,6 +16,9 @@ services:
       POSTGRES_USER: postgres
     ports:
       - '7007:7007'
+    volumes:
+      - ./app-config.docker.yaml:/app/app-config.yaml
+      - ./examples:/app/examples
 
   db:
     image: postgres

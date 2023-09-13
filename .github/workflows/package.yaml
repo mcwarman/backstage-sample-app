@@ -40,7 +40,7 @@ jobs:
           path: ${{ steps.variables.outputs.artifact_path }}
       - name: Set up Docker metadata
         id: metadata
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ steps.variables.outputs.image }}
           tags: |

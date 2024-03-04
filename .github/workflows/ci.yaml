@@ -2,28 +2,50 @@ name: CI
 
 on:
   pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
+
+defaults:
+  run:
+    shell: bash
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
-          cache: 'yarn'
+          node-version: 16
+          cache: yarn
+
       - run: yarn install --immutable --immutable-cache --check-cache
+
       - run: yarn tsc
+
       - run: yarn prettier:check
+
       - run: yarn lint:all
+
       - run: yarn test:all
+
       - run: yarn build:all
+
       - name: Upload app artifact
         uses: actions/upload-artifact@v4
         with:
@@ -31,6 +53,7 @@ jobs:
           path: packages/app/dist
           retention-days: 5
           if-no-files-found: error
+
       - name: Upload backend artifact
         uses: actions/upload-artifact@v4
         with:
@@ -38,15 +61,23 @@ jobs:
           path: packages/backend/dist
           retention-days: 5
           if-no-files-found: error
+
   package-app:
     name: Package app
     needs: build
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yaml
     with:
       type: app
+
   package-backend:
     name: Package backend
     needs: build
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yaml
     with:
       type: backend

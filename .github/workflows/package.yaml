@@ -7,25 +7,45 @@ on:
         required: true
         type: string
 
+defaults:
+  run:
+    shell: bash
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.type }}
+  cancel-in-progress: true
+
 jobs:
   package:
     name: Package
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
     steps:
       - name: Set variables
         id: variables
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TYPE: ${{ inputs.type }}
         run: |
-          echo '::set-output name=artifact_path::packages/${{ inputs.type }}/dist'
-          echo '::set-output name=dockerfile::./dockerfile.${{ inputs.type }}'
-          echo '::set-output name=image::ghcr.io/${{ github.repository }}/${{ inputs.type }}'
+          {
+            printf 'artifact_path=packages/%s/dist\n' "${TYPE}"
+            printf 'dockerfile=./dockerfile.%s\n' "${TYPE}"
+            printf 'image=ghcr.io/%s/%s\n' "${GITHUB_REPOSITORY}" "${TYPE}"
+          } >>"$GITHUB_OUTPUT"
+
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -33,11 +53,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.type }}
           path: ${{ steps.variables.outputs.artifact_path }}
+
       - name: Set up Docker metadata
         id: metadata
         uses: docker/metadata-action@v5
@@ -49,6 +71,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+
       - name: Docker build
         id: docker_build
         uses: docker/build-push-action@v5

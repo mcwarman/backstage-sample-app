@@ -39,7 +39,7 @@ jobs:
           echo "cache-dir=$(yarn cache dir)" >>"${GITHUB_OUTPUT}"
 
       - name: Setup cache - read only
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         if: ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch ) }}
         env:
           cache_name_prefix: node-cache
@@ -50,7 +50,7 @@ jobs:
             ${{ env.cache_name_prefix }}-${{ runner.os }}-yarn-
 
       - name: Setup cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch ) }}
         env:
           cache_name_prefix: node-cache

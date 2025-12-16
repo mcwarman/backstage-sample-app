@@ -73,7 +73,7 @@ jobs:
       - run: yarn build:all
 
       - name: Upload app artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: app
           path: packages/app/dist
@@ -81,7 +81,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload backend artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: backend
           path: packages/backend/dist

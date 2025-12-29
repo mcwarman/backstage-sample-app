@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This project is archived and no longer maintained
+
 # Backstage Sample App
 
 This is your newly scaffolded [Backstage](https://backstage.io) App, Good Luck!
